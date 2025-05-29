@@ -1,96 +1,521 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script defer src="/_vercel/insights/script.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css"
-    />
-    <title>Vercel HTML Starter</title>
-    <meta
-      name="description"
-      content="High-performance HTML based website template."
-    />
-  </head>
-  <body>
-    <h1>Vercel HTML Starter</h1>
-    <p>
-      This template is a simple, but powerful single
-      <code>index.html</code> file deployed to
-      <a href="https://vercel.com">Vercel</a>. When your site is deployed, all
-      static assets (like HTML, JavaScript, CSS, images, and more) are deployed
-      globally to every
-      <a href="https://vercel.com/docs/concepts/edge-network/overview"
-        >Vercel Edge Network</a
-      >
-      region.
-    </p>
-    <h2>Simple, privacy-friendly analytics</h2>
-    <p>
-      Want to understand your visitor traffic? Vercel Analytics gives you
-      first-party, privacy-friendly traffic analytics for your HTML site. This
-      template is already configured using the following script:
-    </p>
-    <pre><code>&lt;script defer src="/_vercel/insights/script.js"&gt;&lt;/script&gt;</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/analytics">Vercel Analytics</a>.
-    </p>
-    <h2>Integrated with git</h2>
-    <p>
-      Deploying updates to your site is as simple as
-      <code>git push</code> thanks to Vercel's advanced
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-      Support for GitHub, GitLab, Bitbucket is zero-configuration, and with the
-      flexible Vercel CLI and API, you can integrate with any tool possible.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-    </p>
-    <h2>Fast <code>gzip</code> compression</h2>
-    <p>
-      To help ensure the smallest possible file sizes for your static assets,
-      the Vercel Edge Network compresses files by default using
-      <code>gzip</code>. You can also optionally use
-      <code>brotli</code> compressesion if you prefer.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/edge-network/compression"
-        >compression</a
-      >.
-    </p>
-    <h2>Advanced routing configuration</h2>
-    <p>
-      Vercel gives you a variety of ways to configure the routing of your
-      website. For example, adding redirects, rewrites, or headers to your page.
-      While you can use <code>vercel.json</code> to define these through JSON,
-      you can also express your routing configuration as code using
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-    <p>
-      Middleware runs before the
-      <a href="https://vercel.com/docs/concepts/edge-network/caching"
-        >Vercel Edge Network Cache</a
-      >, so you can configure routing exactly as your application needs. For
-      example, this template uses <code>middleware.js</code> defined in the root
-      of the repository to add additional security headers to the site:
-    </p>
-    <pre><code>referrer-policy: origin-when-cross-origin
-strict-transport-security: max-age=31536000; includeSubDomains; preload
-x-content-type-options: nosniff
-x-dns-prefetch-control: on
-x-frame-options: DENY</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaishnuv Thiagarajan</title>
+    <link rel="icon" type="image/png" href="./images/logo.png">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #141414; /* Match background color to border color */
+            color: #90EE90; /* Update text color */
+            font-family: "Courier New", Courier, monospace;
+            font-size: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #screen {
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            white-space: pre-wrap;
+            overflow: hidden;
+            border: 45px solid #151515; /* Increase border thickness */
+            border-radius: 100px; /* Increase border rounding */
+            background-color: #141816; /* Slight hint of dark green */
+            line-height: 1.8; /* Increase spacing between lines */
+            position: relative; /* Ensure proper stacking context for VHS lines */
+            z-index: 3; /* Ensure text content is above VHS lines */
+            pointer-events: auto; /* Allow interaction with text and links */
+            animation: none; /* Remove animation for TV turning on */
+        }
+
+        .vhs-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Ensure VHS lines do not block interaction */
+            z-index: 2; /* Increased to be above profile image */
+            background: repeating-linear-gradient(
+                transparent 0px,
+                transparent 2px,
+                rgba(255, 255, 255, 0.1) 3px,
+                transparent 4px
+            );
+            animation: vhs-flicker 0.1s infinite; /* Add flickering effect */
+        }
+
+        #screen::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #90EE90; /* Green line color */
+            transform: translate(-50%, -50%);
+            animation: none; /* Remove green-line animation */
+            z-index: 3; /* Place above all content */
+        }
+
+        /* Enhanced neon flicker animation for image (Instagram-like) */
+        @keyframes neon-flicker-strong {
+            0%   { opacity: 0; }
+            10%  { opacity: 0.3; filter: brightness(2.5) }
+            13%  { opacity: 0.1; }
+            16%  { opacity: 0.5; filter: brightness(2.0) }
+            19%  { opacity: 0.1; }
+            24%  { opacity: 0.7; filter: brightness(1.5) }
+            31%  { opacity: 0.2; }
+            40%  { opacity: 1; filter: brightness(1.2) }
+            100% { opacity: 1; filter: brightness(1) }
+        }
+
+        .flicker-image {
+            position: absolute;
+            top: 50%;
+            right: 200px;
+            transform: translateY(-50%);
+            width: 400px; /* Adjust image size */
+            height: auto;
+            border-radius: 25%; /* Make the image circular */
+            object-fit: cover; /* Ensure the image fits within the circle */
+            opacity: 0; /* Start hidden */
+            animation: none; /* Animation will be set dynamically */
+            z-index: 1; /* Ensure image is behind VHS lines */
+        }
+
+        @keyframes neon-flicker {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes tv-turn-on {
+            0% {
+                opacity: 0;
+                transform: scaleY(0.05); /* Simulate a thin horizontal line */
+            }
+            40% {
+                opacity: 1;
+                transform: scaleY(1.5); /* Dramatic overshoot */
+            }
+            100% {
+                opacity: 1;
+                transform: scaleY(1); /* Settle to normal size */
+            }
+        }
+
+        @keyframes green-line {
+            0% {
+                width: 0;
+                height: 2px; /* Start as a thin line */
+                opacity: 1;
+            }
+            30% {
+                width: 100%; /* Stretch horizontally */
+                height: 2px;
+                opacity: 1;
+            }
+            60% {
+                width: 100%;
+                height: 100%; /* Expand vertically like an eye opening */
+                opacity: 1;
+            }
+            100% {
+                width: 100%;
+                height: 100%; /* Fully reveal the page */
+                opacity: 0; /* Fade out */
+            }
+        }
+
+        @keyframes vhs-flicker {
+            0%, 100% {
+                opacity: 0.9;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes vhs-lines-delay {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1; /* VHS lines appear after delay */
+            }
+        }
+
+        @keyframes content-delay {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1; /* Content appears after delay */
+            }
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+
+        .icons {
+            margin-top: 0; /* Remove space above the icons */
+            display: flex; /* Align icons horizontally */
+            justify-content: flex-start; /* Align icons to the left */
+            align-items: center; /* Vertically align icons */
+            gap: 10px; /* Add minimal space between icons */
+            z-index: 4; /* Ensure icons are above VHS lines */
+            pointer-events: auto; /* Ensure icons are clickable */
+        }
+
+        .icons a, #screen a {
+            text-decoration: none; /* Remove underline from links */
+            color: #90EE90; /* Match text color */
+            font-size: inherit; /* Inherit font size from surrounding text */
+            font-weight: normal; /* Match regular text weight */
+            position: relative; /* Ensure proper stacking context */
+            pointer-events: auto; /* Ensure links are clickable */
+        }
+
+        .icons a:hover, #screen a:hover {
+            color: white; /* Change text color on hover */
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Flashing cursor style */
+        .cursor {
+            display: inline-block;
+            width: 0.5em;
+            height: 1em;
+            background: #90EE90;
+            margin-left: 1px;
+            margin-right: 1px;
+            animation: blink 1s steps(1) infinite;
+            vertical-align: middle;
+        }
+
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #141816;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .logo-placeholder {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            margin-top: -65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        
+        
+        .progress-container {
+            width: 300px;
+            height: 14px;  /* Increased height to make bar visible */
+            background: #1a1a1a;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: #90EE90;
+            margin-top: -75px;
+            animation: progress 3s ease-out forwards;
+        }
+
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            color: #90EE90;
+            margin-top: -85px;
+            font-size: 18px;
+        }
+
+        @keyframes loadingText {
+            0%, 100% { content: "Loading"; }
+            25% { content: "Loading."; }
+            50% { content: "Loading.."; }
+            75% { content: "Loading..."; }
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        .name-header {
+            font-size: 28px;
+            line-height: 1.2; /* Adjust line height for better spacing */
+        }
+
+        .skip-text {
+            position: absolute;
+            right: 200px;
+            width: 400px; /* Match width of profile image */
+            top: calc(50% + 220px);
+            transform: translateY(-50%);
+            font-style: italic;
+            font-size: 14px;
+            color: #90EE90;
+            opacity: 0.7;
+            z-index: 1;
+            text-align: center; /* Center the text */
+        }
+    </style>
+</head>
+<body>
+    <div id="screen"></div>
+
+    <script>
+        const lines = [
+            "\n<b><u><span class='name-header'>Vaishnuv Thiagarajan</span></u></b>", // bold and underline & larger font // bold, underline, and larger font
+            "Builder | Leader | Student \n",
+            "", // empty line
+            "\nECE Honors + Business Honors @ UT Austin (Texas ECB)",
+            "", // empty line
+            "\nHobbies: vibecoding or touching grass",
+            "Location: somewhere between technology, business, and design",
+            "", // empty line
+            "\n<u>Experience:</u>", // bold and underline
+            "Technology Analyst (Product Owner) @ State Farm",
+            "Product Lead @ Texas Product Engineering Org (TPEO)",
+            "", // empty line
+            //"\n<b>Previous:</b>", // bold and underline
+            //"Board member & Associate Editor @ PriMera Scientific Engineering Journal",
+            //"Financial Analyst @ B.D. Sterling",
+            //"", // empty line
+            "\n<u>Projects:</u>", // bold and underline
+            "<a href='https://apps.apple.com/gb/app/aidr-the-first-aid-assistant/id6741950132?uo=2' target='_blank'>Aidr: The First Aid Assistant (v2.0)</a>", // Ensure links are clickable
+            "<a href='https://www.youtube.com/watch?v=fT2gZL11byc' target='_blank'>Embedded Systems Wordle Game</a>", // turn into a link
+            "\n<u>Contact:</u>", // bold and underline
+        ];
+
+        const screen = document.getElementById('screen');
+        const vhsLines = document.createElement('div');
+        vhsLines.classList.add('vhs-lines');
+        screen.appendChild(vhsLines); // Add VHS lines effect to the screen
+
+        let lineIndex = 0;
+        let charIndex = 0;
+        let currentLineDiv = null;
+        let prevCursorDiv = null;
+        let isAnimationComplete = false;
+        let skipText = null;
+        let iconsAdded = false;  // Add this flag
+
+        function addIcons() {
+            if (!iconsAdded) {
+                const iconsDiv = document.createElement('div');
+                iconsDiv.classList.add('icons');
+                iconsDiv.innerHTML = `
+                    <a href="https://github.com/VaishnuvT" target="_blank">&lt;/&gt; </a>
+                    <a href="https://linkedin.com/in/Vaishnuv-Thiagarajan" target="_blank">[in] </a>
+                    <a href="https://medium.com/@vaishnuvthiagarajan" target="_blank">🗐 </a>
+                    <a href="mailto:vaishnuv.thiagarajan@gmail.com" target="_blank">✉</a>
+                `;
+                screen.appendChild(iconsDiv);
+                iconsAdded = true;
+            }
+        }
+
+        // Show only the cursor for 2 seconds before typing starts
+        function showInitialCursor() {
+            const cursorDiv = document.createElement('div');
+            cursorDiv.innerHTML = '<span class="cursor"></span>';
+            screen.appendChild(cursorDiv);
+            setTimeout(() => {
+                screen.removeChild(cursorDiv);
+                typeLine();
+            }, 2000);
+        }
+
+        function typeLine() {
+            if (lineIndex < lines.length) {
+                if (charIndex === 0) {
+                    currentLineDiv = document.createElement('div');
+                    screen.appendChild(currentLineDiv);
+                }
+
+                const currentText = lines[lineIndex];
+                // Remove previous cursor if present
+                if (prevCursorDiv) {
+                    prevCursorDiv.innerHTML = prevCursorDiv.innerHTML.replace(/<span class="cursor(?: no-blink)?"><\/span>$/, '');
+                }
+
+                // Build the text to display up to the current character index
+                let partial = currentText.slice(0, charIndex);
+                // Use a non-blinking cursor during typing
+                currentLineDiv.innerHTML = partial + '<span class="cursor no-blink"></span>';
+
+                prevCursorDiv = currentLineDiv;
+
+                charIndex++;
+                if (charIndex <= currentText.length) {
+                    setTimeout(typeLine, 50);
+                } else {
+                    // After "Vaishnuv Thiagarajan" is typed out, flicker in the image
+                    if (
+                        lineIndex === 0 && // first line in your array is the name
+                        lines[0].toLowerCase().includes("vaishnuv thiagarajan")
+                    ) {
+                        // Only add the image after the name is typed
+                        setTimeout(() => {
+                            let flickerImage = document.querySelector('.flicker-image');
+                            if (!flickerImage) {
+                                flickerImage = document.createElement('img');
+                                flickerImage.src = './images/profile.png'; // Replace with the actual image path
+                                flickerImage.alt = 'Profile Image';
+                                flickerImage.classList.add('flicker-image');
+                                screen.appendChild(flickerImage);
+                                
+                                // Add skip text
+                                skipText = document.createElement('div');
+                                skipText.className = 'skip-text';
+                                skipText.textContent = 'press space to skip';
+                                screen.appendChild(skipText);
+                                
+                                // Add space bar listener
+                                document.addEventListener('keydown', (e) => {
+                                    if (e.code === 'Space' && !isAnimationComplete) {
+                                        skipAnimation();
+                                    }
+                                });
+                            }
+                            flickerImage.style.animation = "neon-flicker-strong 2s 1 forwards";
+                        }, 100); // slight delay for effect
+                    }
+                    // After last line, show blinking cursor at the end
+                    if (lineIndex === lines.length - 1) {
+                        currentLineDiv.innerHTML = currentText + '<span class="cursor"></span>';
+                        prevCursorDiv = null;
+                    } else {
+                        // Remove cursor after line is finished
+                        currentLineDiv.innerHTML = currentText;
+                        prevCursorDiv = null;
+                    }
+                    charIndex = 0;
+                    lineIndex++;
+                    setTimeout(typeLine, 600);
+                }
+            } else {
+                addIcons();
+            }
+        }
+
+        // Add no-blink style for cursor during typing
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .cursor.no-blink {
+                animation: none !important;
+            }
+        `;
+        document.head.appendChild(style);
+
+        function initializeLoadingScreen() {
+            const loadingScreen = document.createElement('div');
+            loadingScreen.className = 'loading-screen';
+            loadingScreen.innerHTML = `
+                <div class="logo-placeholder">
+                    <img src="./images/logo.png" alt="Logo">
+                </div>
+                <div class="progress-container">
+                    <div class="progress-text">Loading</div>
+                    <div class="progress-bar"></div>
+                </div>
+            `;
+            
+            // Add dots animation
+            const loadingText = loadingScreen.querySelector('.progress-text');
+            let dots = 0;
+            const animateDots = setInterval(() => {
+                dots = (dots + 1) % 4;
+                loadingText.textContent = 'Loading' + '.'.repeat(dots);
+            }, 500);
+
+            screen.appendChild(loadingScreen);
+
+            setTimeout(() => {
+                clearInterval(animateDots);
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.remove();
+                    showInitialCursor();
+                }, 500);
+            }, 3500);
+        }
+
+        function skipAnimation() {
+            if (skipText) {
+                skipText.remove();
+            }
+            
+            // Clear existing content except VHS lines and profile image
+            const children = Array.from(screen.children);
+            children.forEach(child => {
+                if (!child.classList.contains('vhs-lines') && 
+                    !child.classList.contains('flicker-image')) {
+                    child.remove();
+                }
+            });
+
+            // Display all content immediately
+            lines.forEach((line, index) => {
+                const div = document.createElement('div');
+                div.innerHTML = line;
+                screen.appendChild(div);
+            });
+            
+            addIcons();
+            isAnimationComplete = true;
+            lineIndex = lines.length; // Prevent further typing
+        }
+
+        initializeLoadingScreen();
+    </script>
+</body>
 </html>
