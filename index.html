@@ -308,11 +308,20 @@
         }
 
         @media screen and (max-width: 768px) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto;
+            }
+
             #screen {
                 border-width: 20px;
                 border-radius: 30px;
                 padding: 15px;
                 font-size: 16px;
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto;
             }
 
             .flicker-image {
