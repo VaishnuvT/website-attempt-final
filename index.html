@@ -70,14 +70,14 @@
         /* Enhanced neon flicker animation for image (Instagram-like) */
         @keyframes neon-flicker-strong {
             0%   { opacity: 0; }
-            10%  { opacity: 0.3; filter: brightness(2.5) }
+            10%  { opacity: 0.3; filter: invert(1) sepia(1) saturate(4) hue-rotate(88deg) brightness(2.5); }
             13%  { opacity: 0.1; }
-            16%  { opacity: 0.5; filter: brightness(2.0) }
+            16%  { opacity: 0.5; filter: invert(1) sepia(1) saturate(4) hue-rotate(88deg) brightness(2.0); }
             19%  { opacity: 0.1; }
-            24%  { opacity: 0.7; filter: brightness(1.5) }
+            24%  { opacity: 0.7; filter: invert(1) sepia(1) saturate(4) hue-rotate(88deg) brightness(1.5); }
             31%  { opacity: 0.2; }
-            40%  { opacity: 1; filter: brightness(1.2) }
-            100% { opacity: 1; filter: brightness(1) }
+            40%  { opacity: 1; filter: invert(1) sepia(1) saturate(4) hue-rotate(88deg) brightness(1.2); }
+            100% { opacity: 1; filter: invert(1) sepia(1) saturate(4) hue-rotate(88deg) brightness(1); }
         }
 
         .flicker-image {
@@ -92,6 +92,7 @@
             opacity: 0;
             animation: none;
             z-index: 1;
+            filter: invert(1) sepia(1) saturate(4) hue-rotate(88deg);
         }
 
         @keyframes neon-flicker {
