@@ -87,20 +87,11 @@
             transform: translateY(-50%);
             width: 400px;
             height: auto;
+            border-radius: 25%;
+            object-fit: cover;
             opacity: 0;
             animation: none;
             z-index: 1;
-            font-size: 1.65px;
-            line-height: 1;
-            letter-spacing: 0;
-            white-space: pre;
-            overflow: hidden;
-            color: #90EE90;
-            background: transparent;
-            border: none;
-            padding: 0;
-            margin: 0;
-            font-family: "Courier New", Courier, monospace;
         }
 
         @keyframes neon-flicker {
@@ -341,7 +332,6 @@
                 width: 280px;
                 margin: 30px auto;
                 display: block;
-                font-size: 1.15px;
             }
 
             .name-header {
@@ -463,13 +453,11 @@
                         setTimeout(() => {
                             let flickerImage = document.querySelector('.flicker-image');
                             if (!flickerImage) {
-                                flickerImage = document.createElement('pre');
+                                flickerImage = document.createElement('img');
+                                flickerImage.src = './ascii-art.png';
+                                flickerImage.alt = 'Profile Image';
                                 flickerImage.classList.add('flicker-image');
                                 screen.appendChild(flickerImage);
-
-                                fetch('./ascii-art.txt')
-                                    .then(r => r.text())
-                                    .then(text => { flickerImage.textContent = text; });
 
                                 // Add skip text
                                 skipText = document.createElement('div');
