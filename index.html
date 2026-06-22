@@ -58,6 +58,24 @@
             user-select: none;
         }
 
+        .welcome-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+        }
+
+        .welcome-left {
+            flex: 1 1 auto;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .welcome-right {
+            flex: 0 0 auto;
+            max-width: 44%;
+            overflow: hidden;
+        }
+
         .logo-pre {
             font-family: 'Courier New', Courier, monospace;
             font-size: 13px;
@@ -66,6 +84,15 @@
             white-space: pre;
             margin: 2px 0 8px;
             letter-spacing: 0;
+        }
+
+        .portrait-pre {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 7px;
+            line-height: 1;
+            color: #ece0c4;
+            white-space: pre;
+            opacity: 0.85;
         }
 
         .version-tag {
@@ -233,23 +260,53 @@
         promptLine();
         blank();
 
-        const pre = document.createElement('pre');
-        pre.className = 'logo-pre';
-        pre.textContent = LOGO;
-        output.appendChild(pre);
+        // Two-column wrapper
+        const row = document.createElement('div');
+        row.className = 'welcome-row';
+
+        // ── Left column ──────────────────────────────────────────────────────
+        const left = document.createElement('div');
+        left.className = 'welcome-left';
+
+        const logoPre = document.createElement('pre');
+        logoPre.className = 'logo-pre';
+        logoPre.textContent = LOGO;
+        left.appendChild(logoPre);
 
         const ver = document.createElement('div');
         ver.className = 'version-tag';
         ver.textContent = VERSION;
-        output.appendChild(ver);
+        left.appendChild(ver);
 
-        blank();
-        line("Type 'help' to see list of available commands.");
-        blank();
-        sep();
-        blank();
-        line("Builder | Leader | Student &mdash; UT Austin.");
-        sep();
+        const addLeft = (html) => {
+            const d = document.createElement('div');
+            d.className = 'line';
+            d.innerHTML = html;
+            left.appendChild(d);
+        };
+        addLeft('');
+        addLeft("Type 'help' to see list of available commands.");
+        addLeft('');
+        addLeft('--');
+        addLeft('');
+        addLeft("Builder | Leader | Student &mdash; UT Austin.");
+        addLeft('--');
+
+        // ── Right column — ASCII portrait ────────────────────────────────────
+        const right = document.createElement('div');
+        right.className = 'welcome-right';
+
+        const portrait = document.createElement('pre');
+        portrait.className = 'portrait-pre';
+        fetch('./portrait.txt')
+            .then(r => r.text())
+            .then(t => { portrait.textContent = t; });
+        right.appendChild(portrait);
+
+        row.appendChild(left);
+        row.appendChild(right);
+        output.appendChild(row);
+
         blank();
         promptLine();
     }
