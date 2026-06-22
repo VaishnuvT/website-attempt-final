@@ -5,563 +5,249 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vaishnuv Thiagarajan</title>
     <link rel="icon" type="image/png" href="./logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        body {
+        *, *::before, *::after {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            background-color: #141414; /* Match background color to border color */
-            color: #90EE90; /* Update text color */
-            font-family: "Courier New", Courier, monospace;
-            font-size: 18px;
+        }
+
+        body {
+            background: #111111;
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        #screen {
-            width: 100%;
-            height: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-            white-space: pre-wrap;
-            overflow: hidden;
-            border: 45px solid #151515; /* Increase border thickness */
-            border-radius: 100px; /* Increase border rounding */
-            background-color: #141816; /* Slight hint of dark green */
-            line-height: 1.8; /* Increase spacing between lines */
-            position: relative; /* Ensure proper stacking context for VHS lines */
-            z-index: 3; /* Ensure text content is above VHS lines */
-            pointer-events: auto; /* Allow interaction with text and links */
-            animation: none; /* Remove animation for TV turning on */
-        }
-
-        .vhs-lines {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* Ensure VHS lines do not block interaction */
-            z-index: 2; /* Increased to be above profile image */
-            background: repeating-linear-gradient(
-                transparent 0px,
-                transparent 2px,
-                rgba(255, 255, 255, 0.1) 3px,
-                transparent 4px
-            );
-            animation: vhs-flicker 0.1s infinite; /* Add flickering effect */
-        }
-
-        #screen::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background-color: #90EE90; /* Green line color */
-            transform: translate(-50%, -50%);
-            animation: none; /* Remove green-line animation */
-            z-index: 3; /* Place above all content */
-        }
-
-        /* Enhanced neon flicker animation for image (Instagram-like) */
-        @keyframes neon-flicker-strong {
-            0%   { opacity: 0; }
-            10%  { opacity: 0.3; filter: brightness(2.5) }
-            13%  { opacity: 0.1; }
-            16%  { opacity: 0.5; filter: brightness(2.0) }
-            19%  { opacity: 0.1; }
-            24%  { opacity: 0.7; filter: brightness(1.5) }
-            31%  { opacity: 0.2; }
-            40%  { opacity: 1; filter: brightness(1.0) }
-            100% { opacity: 1; filter: brightness(0.8) }
-        }
-
-        .flicker-image {
-            position: absolute;
-            top: 50%;
-            right: 200px;
-            transform: translateY(-50%);
-            width: 400px;
-            height: auto;
-            border-radius: 25%;
-            object-fit: cover;
-            opacity: 0;
-            animation: none;
-            z-index: 1;
-        }
-
-        @keyframes neon-flicker {
-            0% {
-                opacity: 0;
-            }
-            50% {
-                opacity: 0.5;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        @keyframes tv-turn-on {
-            0% {
-                opacity: 0;
-                transform: scaleY(0.05); /* Simulate a thin horizontal line */
-            }
-            40% {
-                opacity: 1;
-                transform: scaleY(1.5); /* Dramatic overshoot */
-            }
-            100% {
-                opacity: 1;
-                transform: scaleY(1); /* Settle to normal size */
-            }
-        }
-
-        @keyframes green-line {
-            0% {
-                width: 0;
-                height: 2px; /* Start as a thin line */
-                opacity: 1;
-            }
-            30% {
-                width: 100%; /* Stretch horizontally */
-                height: 2px;
-                opacity: 1;
-            }
-            60% {
-                width: 100%;
-                height: 100%; /* Expand vertically like an eye opening */
-                opacity: 1;
-            }
-            100% {
-                width: 100%;
-                height: 100%; /* Fully reveal the page */
-                opacity: 0; /* Fade out */
-            }
-        }
-
-        @keyframes vhs-flicker {
-            0%, 100% {
-                opacity: 0.9;
-            }
-            50% {
-                opacity: 1;
-            }
-        }
-
-        @keyframes vhs-lines-delay {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1; /* VHS lines appear after delay */
-            }
-        }
-
-        @keyframes content-delay {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1; /* Content appears after delay */
-            }
-        }
-
-        .hidden {
-            visibility: hidden;
-        }
-
-        .icons {
-            margin-top: 0; /* Remove space above the icons */
-            display: flex; /* Align icons horizontally */
-            justify-content: flex-start; /* Align icons to the left */
-            align-items: center; /* Vertically align icons */
-            gap: 10px; /* Add minimal space between icons */
-            z-index: 4; /* Ensure icons are above VHS lines */
-            pointer-events: auto; /* Ensure icons are clickable */
-        }
-
-        .icons a, #screen a {
-            text-decoration: none; /* Remove underline from links */
-            color: #90EE90; /* Match text color */
-            font-size: inherit; /* Inherit font size from surrounding text */
-            font-weight: normal; /* Match regular text weight */
-            position: relative; /* Ensure proper stacking context */
-            pointer-events: auto; /* Ensure links are clickable */
-        }
-
-        .icons a:hover, #screen a:hover {
-            color: white; /* Change text color on hover */
-        }
-
-        @keyframes blink {
-            50% {
-                opacity: 0;
-            }
-        }
-
-        /* Flashing cursor style */
-        .cursor {
-            display: inline-block;
-            width: 0.5em;
-            height: 1em;
-            background: #90EE90;
-            margin-left: 1px;
-            margin-right: 1px;
-            animation: blink 1s steps(1) infinite;
-            vertical-align: middle;
-        }
-
-        .loading-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #141816;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            opacity: 1;
-            transition: opacity 0.5s ease;
+            padding: 28px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            color: #d8d8d8;
+            line-height: 1.7;
         }
 
-        .logo-placeholder {
-            width: 300px;
-            height: 300px;
-            position: relative;
-            overflow: hidden;
-            margin-top: -65px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .logo-placeholder img {
+        #terminal {
             width: 100%;
-            height: 100%;
-            object-fit: contain;
+            max-width: 1050px;
+            min-height: 76vh;
+            background: #0e0e0e;
+            border: 1.5px solid #c8a020;
+            border-radius: 6px;
+            padding: 28px 34px 32px;
+            cursor: text;
         }
 
-        
-        
-        .progress-container {
-            width: 300px;
-            height: 14px;  /* Increased height to make bar visible */
-            background: #1a1a1a;
-            position: relative;
+        .prompt {
+            color: #c8a020;
+            user-select: none;
         }
 
-        .progress-bar {
-            width: 0%;
-            height: 100%;
-            background: #90EE90;
-            margin-top: -75px;
-            animation: progress 3s ease-out forwards;
+        .logo-wrap {
+            margin: 4px 0 6px;
+            line-height: 1;
         }
 
-        .progress-text {
-            position: absolute;
-            width: 100%;
-            text-align: center;
-            color: #90EE90;
-            margin-top: -85px;
-            font-size: 18px;
+        .logo-text {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 54px;
+            color: #ece0c4;
+            display: inline;
+            line-height: 1;
         }
 
-        @keyframes loadingText {
-            0%, 100% { content: "Loading"; }
-            25% { content: "Loading."; }
-            50% { content: "Loading.."; }
-            75% { content: "Loading..."; }
-        }
-
-        @keyframes progress {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
-        }
-
-        .name-header {
-            font-size: 28px;
-            line-height: 1.2; /* Adjust line height for better spacing */
-        }
-
-        .skip-text {
-            position: absolute;
-            right: 200px;
-            width: 400px; /* Match width of profile image */
-            top: calc(50% + 220px);
-            transform: translateY(-50%);
-            font-style: italic;
+        .version-tag {
             font-size: 14px;
-            color: #90EE90;
-            opacity: 0.7;
-            z-index: 1;
-            text-align: center; /* Center the text */
+            color: #d8d8d8;
+            margin-left: 16px;
+            vertical-align: middle;
+            font-family: 'Courier New', monospace;
         }
 
-        @media screen and (max-width: 768px) {
-            body {
-                height: auto;
-                min-height: 100vh;
-                overflow-y: auto;
-            }
+        .line {
+            min-height: 1.5em;
+            white-space: pre-wrap;
+        }
 
-            #screen {
-                border-width: 20px;
-                border-radius: 30px;
-                padding: 15px;
-                font-size: 16px;
-                height: auto;
-                min-height: 100vh;
-                overflow-y: auto;
-            }
+        .cmd-name {
+            color: #c8a020;
+            display: inline-block;
+            min-width: 140px;
+        }
 
-            .flicker-image {
-                position: relative;
-                top: auto;
-                right: auto;
-                transform: none;
-                width: 280px;
-                margin: 30px auto;
-                display: block;
-            }
+        .input-row {
+            display: flex;
+            align-items: center;
+        }
 
-            .name-header {
-                font-size: 24px;
-            }
+        #cmd-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #d8d8d8;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            flex: 1;
+            caret-color: #c8a020;
+        }
 
-            .skip-text {
-                position: relative;
-                width: 100%;
-                top: auto;
-                right: auto;
-                transform: none;
-                margin: 10px auto;
-            }
+        a {
+            color: #c8a020;
+            text-decoration: none;
+        }
 
-            .icons {
-                justify-content: center;
-                margin-top: 20px;
-            }
+        a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 620px) {
+            .logo-text { font-size: 26px; }
+            body { padding: 12px; font-size: 13px; }
+            #terminal { padding: 16px 18px; }
+            #cmd-input { font-size: 13px; }
         }
     </style>
 </head>
 <body>
-    <div id="screen"></div>
+<div id="terminal">
+    <div id="output"></div>
+    <div class="input-row">
+        <span class="prompt">visitor@vaishnuv:~$&nbsp;</span>
+        <input id="cmd-input" type="text" autofocus spellcheck="false" autocomplete="off" />
+    </div>
+</div>
 
-    <script>
-        const lines = [
-            "\n<b><u><span class='name-header'>Vaishnuv Thiagarajan</span></u></b>", // bold and underline & larger font // bold, underline, and larger font
-            "Builder | Leader | Student \n",
-            "", // empty line
-            "\nECE Honors + Business Honors @ UT Austin (Texas ECB)",
-            "<a href='https://txproduct.org' target='_blank'>President @ Texas Product Engineering Organization (TPEO)</a>",
-            "", // empty line
-            "\nHobbies: vibecoding or touching grass",
-            "Location: Austin, TX",
-            "", // empty line
-            "\n<u>Experience:</u>", // bold and underline
-            "Product Management Intern @ IBM",
-            "AI Solutions Engineer @ Lendflow (YC W21)",
-            "Growth & Strategy Partner @ Anthropic",
-            "Technology Analyst Intern @ State Farm",
-            "", // empty line
-            "\n<u>Projects:</u>", // bold and underline
-            "AI Agentic Deals Dashboard (Lendflow)",
-            "Hardware-as-a-Service Web Platform",
-            "<a href='https://www.scriptic.xyz/' target='_blank'>Scriptic - AI Webpage Search Extension</a>",
-            "<a href='https://www.aidr-app.xyz/' target='_blank'>Aidr: Outdoor Safety Guidance App</a>",
-            "\n<u>Contact:</u>", // bold and underline
-        ];
+<script>
+    const output = document.getElementById('output');
+    const input  = document.getElementById('cmd-input');
 
-        const screen = document.getElementById('screen');
-        const vhsLines = document.createElement('div');
-        vhsLines.classList.add('vhs-lines');
-        screen.appendChild(vhsLines); // Add VHS lines effect to the screen
+    const PROMPT  = '<span class="prompt">visitor@vaishnuv:~$</span> ';
+    const VERSION = 'v2.0.0';
 
-        let lineIndex = 0;
-        let charIndex = 0;
-        let currentLineDiv = null;
-        let prevCursorDiv = null;
-        let isAnimationComplete = false;
-        let skipText = null;
-        let iconsAdded = false;  // Add this flag
+    function line(html, cls = 'line') {
+        const d = document.createElement('div');
+        d.className = cls;
+        d.innerHTML = html;
+        output.appendChild(d);
+    }
 
-        function addIcons() {
-            if (!iconsAdded) {
-                const iconsDiv = document.createElement('div');
-                iconsDiv.classList.add('icons');
-                iconsDiv.innerHTML = `
-                    <a href="https://github.com/VaishnuvT" target="_blank">&lt;/&gt; </a>
-                    <a href="https://linkedin.com/in/Vaishnuv-Thiagarajan" target="_blank">[in] </a>
-                    <a href="mailto:vaishnuv.thiagarajan@gmail.com" target="_blank">✉</a>
-                `;
-                screen.appendChild(iconsDiv);
-                iconsAdded = true;
-            }
+    function blank() { line(''); }
+    function sep()   { line('--'); }
+
+    function promptLine() {
+        line(PROMPT + '~');
+    }
+
+    const COMMANDS = {
+        help() {
+            line("Available commands:");
+            blank();
+            line('<span class="cmd-name">about</span>      who am I');
+            line('<span class="cmd-name">experience</span> where I\'ve worked');
+            line('<span class="cmd-name">projects</span>   things I\'ve built');
+            line('<span class="cmd-name">contact</span>    how to reach me');
+            line('<span class="cmd-name">clear</span>      clear the terminal');
+        },
+
+        about() {
+            line('Vaishnuv Thiagarajan');
+            blank();
+            line('ECE Honors + Business Honors @ UT Austin (Texas ECB)');
+            line('<a href="https://txproduct.org" target="_blank">President @ Texas Product Engineering Organization (TPEO)</a>');
+            blank();
+            line('Builder | Leader | Student');
+            line('Hobbies: vibecoding or touching grass');
+            line('Location: Austin, TX');
+        },
+
+        experience() {
+            line('Experience:');
+            blank();
+            line('  Product Management Intern @ IBM');
+            line('  AI Solutions Engineer @ Lendflow (YC W21)');
+            line('  Growth &amp; Strategy Partner @ Anthropic');
+            line('  Technology Analyst Intern @ State Farm');
+        },
+
+        projects() {
+            line('Projects:');
+            blank();
+            line('  AI Agentic Deals Dashboard (Lendflow)');
+            line('  Hardware-as-a-Service Web Platform');
+            line('  <a href="https://www.scriptic.xyz/" target="_blank">Scriptic - AI Webpage Search Extension</a>');
+            line('  <a href="https://www.aidr-app.xyz/" target="_blank">Aidr: Outdoor Safety Guidance App</a>');
+        },
+
+        contact() {
+            line('Contact:');
+            blank();
+            line('  GitHub    <a href="https://github.com/VaishnuvT" target="_blank">github.com/VaishnuvT</a>');
+            line('  LinkedIn  <a href="https://linkedin.com/in/Vaishnuv-Thiagarajan" target="_blank">linkedin.com/in/Vaishnuv-Thiagarajan</a>');
+            line('  Email     <a href="mailto:vaishnuv.thiagarajan@gmail.com">vaishnuv.thiagarajan@gmail.com</a>');
+        },
+
+        clear() {
+            output.innerHTML = '';
+            welcome();
+        }
+    };
+
+    function run(raw) {
+        const cmd = raw.trim().toLowerCase();
+        line(PROMPT + raw);
+        blank();
+
+        if (!raw.trim()) {
+            promptLine();
+            return;
         }
 
-        // Show only the cursor for 2 seconds before typing starts
-        function showInitialCursor() {
-            const cursorDiv = document.createElement('div');
-            cursorDiv.innerHTML = '<span class="cursor"></span>';
-            screen.appendChild(cursorDiv);
-            setTimeout(() => {
-                screen.removeChild(cursorDiv);
-                typeLine();
-            }, 2000);
+        if (COMMANDS[cmd]) {
+            COMMANDS[cmd]();
+        } else {
+            line("command not found: " + raw.trim() + ". Type 'help' for available commands.");
         }
 
-        function typeLine() {
-            if (lineIndex < lines.length) {
-                if (charIndex === 0) {
-                    currentLineDiv = document.createElement('div');
-                    screen.appendChild(currentLineDiv);
-                }
+        blank();
+        promptLine();
+        window.scrollTo(0, document.body.scrollHeight);
+    }
 
-                const currentText = lines[lineIndex];
-                // Remove previous cursor if present
-                if (prevCursorDiv) {
-                    prevCursorDiv.innerHTML = prevCursorDiv.innerHTML.replace(/<span class="cursor(?: no-blink)?"><\/span>$/, '');
-                }
+    function welcome() {
+        promptLine();
+        blank();
 
-                // Build the text to display up to the current character index
-                let partial = currentText.slice(0, charIndex);
-                // Use a non-blinking cursor during typing
-                currentLineDiv.innerHTML = partial + '<span class="cursor no-blink"></span>';
+        const logoWrap = document.createElement('div');
+        logoWrap.className = 'logo-wrap';
+        logoWrap.innerHTML =
+            '<span class="logo-text">VAISHNUV</span>' +
+            '<span class="version-tag">' + VERSION + '</span>';
+        output.appendChild(logoWrap);
 
-                prevCursorDiv = currentLineDiv;
+        blank();
+        line("Type 'help' to see list of available commands.");
+        blank();
+        sep();
+        blank();
+        line("Builder | Leader | Student &mdash; UT Austin.");
+        sep();
+        blank();
+        promptLine();
+    }
 
-                charIndex++;
-                if (charIndex <= currentText.length) {
-                    setTimeout(typeLine, 50);
-                } else {
-                    // After "Vaishnuv Thiagarajan" is typed out, flicker in the image
-                    if (
-                        lineIndex === 0 && // first line in your array is the name
-                        lines[0].toLowerCase().includes("vaishnuv thiagarajan")
-                    ) {
-                        // Only add the image after the name is typed
-                        setTimeout(() => {
-                            let flickerImage = document.querySelector('.flicker-image');
-                            if (!flickerImage) {
-                                flickerImage = document.createElement('img');
-                                flickerImage.src = './profile-new.png';
-                                flickerImage.alt = 'Profile Image';
-                                flickerImage.classList.add('flicker-image');
-                                screen.appendChild(flickerImage);
-
-                                // Add skip text
-                                skipText = document.createElement('div');
-                                skipText.className = 'skip-text';
-                                skipText.textContent = 'press space to skip';
-                                screen.appendChild(skipText);
-
-                                // Add space bar listener
-                                document.addEventListener('keydown', (e) => {
-                                    if (e.code === 'Space' && !isAnimationComplete) {
-                                        skipAnimation();
-                                    }
-                                });
-                            }
-                            flickerImage.style.animation = "neon-flicker-strong 2s 1 forwards";
-                        }, 100); // slight delay for effect
-                    }
-                    // After last line, show blinking cursor at the end
-                    if (lineIndex === lines.length - 1) {
-                        currentLineDiv.innerHTML = currentText + '<span class="cursor"></span>';
-                        prevCursorDiv = null;
-                    } else {
-                        // Remove cursor after line is finished
-                        currentLineDiv.innerHTML = currentText;
-                        prevCursorDiv = null;
-                    }
-                    charIndex = 0;
-                    lineIndex++;
-                    setTimeout(typeLine, 600);
-                }
-            } else {
-                addIcons();
-            }
+    input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+            const val = input.value;
+            input.value = '';
+            run(val);
         }
+    });
 
-        // Add no-blink style for cursor during typing
-        const style = document.createElement('style');
-        style.innerHTML = `
-            .cursor.no-blink {
-                animation: none !important;
-            }
-        `;
-        document.head.appendChild(style);
+    document.getElementById('terminal').addEventListener('click', () => input.focus());
 
-        function initializeLoadingScreen() {
-            const loadingScreen = document.createElement('div');
-            loadingScreen.className = 'loading-screen';
-            loadingScreen.innerHTML = `
-                <div class="logo-placeholder">
-                    <img src="./logo.png" alt="Logo">
-                </div>
-                <div class="progress-container">
-                    <div class="progress-text">Loading</div>
-                    <div class="progress-bar"></div>
-                </div>
-            `;
-            
-            // Add dots animation
-            const loadingText = loadingScreen.querySelector('.progress-text');
-            let dots = 0;
-            const animateDots = setInterval(() => {
-                dots = (dots + 1) % 4;
-                loadingText.textContent = 'Loading' + '.'.repeat(dots);
-            }, 500);
-
-            screen.appendChild(loadingScreen);
-
-            setTimeout(() => {
-                clearInterval(animateDots);
-                loadingScreen.style.opacity = '0';
-                setTimeout(() => {
-                    loadingScreen.remove();
-                    showInitialCursor();
-                }, 500);
-            }, 3500);
-        }
-
-        function skipAnimation() {
-            if (skipText) {
-                skipText.remove();
-            }
-            
-            // Clear existing content except VHS lines and profile image
-            const children = Array.from(screen.children);
-            children.forEach(child => {
-                if (!child.classList.contains('vhs-lines') && 
-                    !child.classList.contains('flicker-image')) {
-                    child.remove();
-                }
-            });
-
-            // Display all content immediately
-            lines.forEach((line, index) => {
-                const div = document.createElement('div');
-                div.innerHTML = line;
-                screen.appendChild(div);
-            });
-            
-            addIcons();
-            isAnimationComplete = true;
-            lineIndex = lines.length; // Prevent further typing
-        }
-
-        initializeLoadingScreen();
-    </script>
+    welcome();
+</script>
 </body>
 </html>
