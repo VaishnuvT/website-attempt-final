@@ -26,7 +26,7 @@
             padding: 20px;
             font-family: 'Courier New', Courier, monospace;
             font-size: 15px;
-            color: #d8d8d8;
+            color: #ece0c4;
             line-height: 1.7;
         }
 
@@ -34,7 +34,7 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            background: #0e0e0e;
+            background: #333F48;
             border: 1.5px solid #c8a020;
             border-radius: 6px;
             padding: 28px 34px 28px;
@@ -54,7 +54,7 @@
         }
 
         .prompt {
-            color: #c8a020;
+            color: #BF5700;
             user-select: none;
         }
 
@@ -97,7 +97,7 @@
 
         .version-tag {
             font-size: 14px;
-            color: #d8d8d8;
+            color: #ece0c4;
             margin-bottom: 2px;
         }
 
@@ -107,7 +107,7 @@
         }
 
         .cmd-name {
-            color: #c8a020;
+            color: #BF5700;
             display: inline-block;
             min-width: 140px;
         }
@@ -122,15 +122,15 @@
             background: transparent;
             border: none;
             outline: none;
-            color: #d8d8d8;
+            color: #ece0c4;
             font-family: 'Courier New', Courier, monospace;
             font-size: 15px;
             flex: 1;
-            caret-color: #c8a020;
+            caret-color: #BF5700;
         }
 
         a {
-            color: #c8a020;
+            color: #D6D2C4;
             text-decoration: none;
         }
 
@@ -151,7 +151,7 @@
 <div id="terminal">
     <div id="output"></div>
     <div class="input-row">
-        <span class="prompt">visitor@vaishnuv:~$&nbsp;</span>
+        <span class="prompt">visitor@portfolio:~$&nbsp;</span>
         <input id="cmd-input" type="text" autofocus spellcheck="false" autocomplete="off" />
     </div>
 </div>
@@ -176,7 +176,7 @@
     const output = document.getElementById('output');
     const input  = document.getElementById('cmd-input');
 
-    const PROMPT  = '<span class="prompt">visitor@vaishnuv:~$</span> ';
+    const PROMPT  = '<span class="prompt">visitor@portfolio:~$</span> ';
     const VERSION = 'v2.0.0';
 
     function line(html, cls = 'line') {
@@ -258,6 +258,8 @@
     // ─── Welcome screen ───────────────────────────────────────────────────────
     function welcome() {
         promptLine();
+        blank();
+        line('Welcome to my portfolio: ' + new Date().toString().replace(/\s*\(.*\)$/, ''));
         blank();
 
         // Two-column wrapper
