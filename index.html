@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vaishnuv Thiagarajan</title>
     <link rel="icon" type="image/png" href="./logo.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -48,6 +45,7 @@
         #output {
             flex: 1;
             overflow-y: auto;
+            overflow-x: hidden;
             scrollbar-width: none;
         }
 
@@ -60,25 +58,20 @@
             user-select: none;
         }
 
-        .logo-wrap {
-            margin: 4px 0 6px;
+        .logo-pre {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
             line-height: 1;
-        }
-
-        .logo-text {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 54px;
             color: #ece0c4;
-            display: inline;
-            line-height: 1;
+            white-space: pre;
+            margin: 2px 0 8px;
+            letter-spacing: 0;
         }
 
         .version-tag {
             font-size: 14px;
             color: #d8d8d8;
-            margin-left: 16px;
-            vertical-align: middle;
-            font-family: 'Courier New', monospace;
+            margin-bottom: 2px;
         }
 
         .line {
@@ -95,6 +88,7 @@
         .input-row {
             display: flex;
             align-items: center;
+            flex-shrink: 0;
         }
 
         #cmd-input {
@@ -119,7 +113,7 @@
         }
 
         @media (max-width: 620px) {
-            .logo-text { font-size: 26px; }
+            .logo-pre { font-size: 6px; }
             body { padding: 12px; font-size: 13px; }
             #terminal { padding: 16px 18px; }
             #cmd-input { font-size: 13px; }
@@ -136,6 +130,46 @@
 </div>
 
 <script>
+    // ─── Pixel font ───────────────────────────────────────────────────────────
+    // Each letter is defined as rows of 1/0 bits (1 = filled block, 0 = empty).
+    // Double-width blocks (██) give roughly square pixels in a monospace font.
+    const FONT = {
+        A: ["0110","1001","1111","1001","1001"],
+        G: ["0111","1000","1011","1001","0111"],
+        H: ["1001","1001","1111","1001","1001"],
+        I: ["1111","0110","0110","0110","1111"],
+        J: ["0011","0001","0001","1001","0110"],
+        N: ["1001","1101","1011","1001","1001"],
+        R: ["1110","1001","1110","1010","1001"],
+        S: ["0111","1000","0110","0001","1110"],
+        T: ["1111","0110","0110","0110","0110"],
+        U: ["1001","1001","1001","1001","0110"],
+        V: ["10001","10001","10001","01010","00100"],
+    };
+
+    const BLOCK = '██'; // ██
+    const EMPTY = '  ';
+    const GAP   = '  ';
+
+    function renderAscii(text) {
+        const chars = text.toUpperCase().split('');
+        const rows  = [];
+        for (let r = 0; r < 5; r++) {
+            let row = '';
+            chars.forEach((ch, i) => {
+                const glyph = FONT[ch];
+                if (!glyph) return;
+                for (const bit of glyph[r]) {
+                    row += bit === '1' ? BLOCK : EMPTY;
+                }
+                if (i < chars.length - 1 && FONT[chars[i + 1]]) row += GAP;
+            });
+            rows.push(row);
+        }
+        return rows.join('\n');
+    }
+
+    // ─── Terminal helpers ─────────────────────────────────────────────────────
     const output = document.getElementById('output');
     const input  = document.getElementById('cmd-input');
 
@@ -151,14 +185,12 @@
 
     function blank() { line(''); }
     function sep()   { line('--'); }
+    function promptLine() { line(PROMPT + '~'); }
 
-    function promptLine() {
-        line(PROMPT + '~');
-    }
-
+    // ─── Commands ─────────────────────────────────────────────────────────────
     const COMMANDS = {
         help() {
-            line("Available commands:");
+            line('Available commands:');
             blank();
             line('<span class="cmd-name">about</span>      who am I');
             line('<span class="cmd-name">experience</span> where I\'ve worked');
@@ -166,7 +198,6 @@
             line('<span class="cmd-name">contact</span>    how to reach me');
             line('<span class="cmd-name">clear</span>      clear the terminal');
         },
-
         about() {
             line('Vaishnuv Thiagarajan');
             blank();
@@ -177,7 +208,6 @@
             line('Hobbies: vibecoding or touching grass');
             line('Location: Austin, TX');
         },
-
         experience() {
             line('Experience:');
             blank();
@@ -186,7 +216,6 @@
             line('  Growth &amp; Strategy Partner @ Anthropic');
             line('  Technology Analyst Intern @ State Farm');
         },
-
         projects() {
             line('Projects:');
             blank();
@@ -195,7 +224,6 @@
             line('  <a href="https://www.scriptic.xyz/" target="_blank">Scriptic - AI Webpage Search Extension</a>');
             line('  <a href="https://www.aidr-app.xyz/" target="_blank">Aidr: Outdoor Safety Guidance App</a>');
         },
-
         contact() {
             line('Contact:');
             blank();
@@ -203,7 +231,6 @@
             line('  LinkedIn  <a href="https://linkedin.com/in/Vaishnuv-Thiagarajan" target="_blank">linkedin.com/in/Vaishnuv-Thiagarajan</a>');
             line('  Email     <a href="mailto:vaishnuv.thiagarajan@gmail.com">vaishnuv.thiagarajan@gmail.com</a>');
         },
-
         clear() {
             output.innerHTML = '';
             welcome();
@@ -211,36 +238,34 @@
     };
 
     function run(raw) {
-        const cmd = raw.trim().toLowerCase();
         line(PROMPT + raw);
         blank();
-
-        if (!raw.trim()) {
-            promptLine();
-            return;
-        }
-
+        if (!raw.trim()) { promptLine(); return; }
+        const cmd = raw.trim().toLowerCase();
         if (COMMANDS[cmd]) {
             COMMANDS[cmd]();
         } else {
             line("command not found: " + raw.trim() + ". Type 'help' for available commands.");
         }
-
         blank();
         promptLine();
         output.scrollTop = output.scrollHeight;
     }
 
+    // ─── Welcome screen ───────────────────────────────────────────────────────
     function welcome() {
         promptLine();
         blank();
 
-        const logoWrap = document.createElement('div');
-        logoWrap.className = 'logo-wrap';
-        logoWrap.innerHTML =
-            '<span class="logo-text">VAISHNUV</span>' +
-            '<span class="version-tag">' + VERSION + '</span>';
-        output.appendChild(logoWrap);
+        const pre = document.createElement('pre');
+        pre.className = 'logo-pre';
+        pre.textContent = renderAscii('VAISHNUV') + '\n\n' + renderAscii('THIAGARAJAN');
+        output.appendChild(pre);
+
+        const ver = document.createElement('div');
+        ver.className = 'version-tag';
+        ver.textContent = VERSION;
+        output.appendChild(ver);
 
         blank();
         line("Type 'help' to see list of available commands.");
