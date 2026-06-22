@@ -198,9 +198,18 @@
         blank();
         COMMANDS[chosen]();
         blank();
-        promptLine();
-        showMenu();
+        showTypingPrompt();
         scroll();
+    }
+
+    // ── Typing prompt (used after first command onwards) ──────────────────────
+    function showTypingPrompt() {
+        mode   = 'typing';
+        buffer = '';
+        liveEl = addEl('div', 'live-line');
+        renderLiveLine();
+        scroll();
+        capture.focus();
     }
 
     // ── Live typing line ──────────────────────────────────────────────────────
@@ -292,24 +301,17 @@
                     line('command not found: ' + esc(cmd) + ". Type 'help' for options.");
                 }
                 blank();
-                promptLine();
-                showMenu();
+                showTypingPrompt();
 
             } else if (e.key === 'Backspace') {
                 e.preventDefault();
                 buffer = buffer.slice(0, -1);
-                if (buffer === '') {
-                    liveEl.remove(); liveEl = null;
-                    showMenu();
-                } else {
-                    renderLiveLine();
-                }
+                renderLiveLine();
 
             } else if (e.key === 'Escape') {
                 e.preventDefault();
                 buffer = '';
-                if (liveEl) { liveEl.remove(); liveEl = null; }
-                showMenu();
+                renderLiveLine();
 
             } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
                 buffer += e.key;
