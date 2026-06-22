@@ -6,16 +6,9 @@
     <title>Vaishnuv Thiagarajan</title>
     <link rel="icon" type="image/png" href="./logo.png">
     <style>
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        html, body {
-            height: 100%;
-            overflow: hidden;
-        }
+        html, body { height: 100%; overflow: hidden; }
 
         body {
             background: #000000;
@@ -23,7 +16,7 @@
             display: flex;
             align-items: stretch;
             justify-content: center;
-            padding: 20px;
+            padding: 40px;
             font-family: 'Courier New', Courier, monospace;
             font-size: 15px;
             color: #ece0c4;
@@ -37,9 +30,9 @@
             background: #0e0e0e;
             border: 1.5px solid #333F48;
             border-radius: 6px;
-            padding: 28px 34px 28px;
-            cursor: text;
+            padding: 28px 34px;
             overflow: hidden;
+            cursor: text;
         }
 
         #output {
@@ -48,15 +41,19 @@
             overflow-x: hidden;
             scrollbar-width: none;
         }
+        #output::-webkit-scrollbar { display: none; }
 
-        #output::-webkit-scrollbar {
-            display: none;
+        /* Hidden keyboard capture input */
+        #capture {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+            width: 1px;
+            height: 1px;
+            pointer-events: none;
         }
 
-        .prompt {
-            color: #BF5700;
-            user-select: none;
-        }
+        .prompt { color: #BF5700; user-select: none; }
 
         .welcome-row {
             display: flex;
@@ -64,17 +61,8 @@
             gap: 32px;
             flex-wrap: wrap;
         }
-
-        .welcome-left {
-            flex: 0 0 auto;
-            min-width: 0;
-            overflow: hidden;
-        }
-
-        .welcome-right {
-            flex: 0 0 auto;
-            overflow: hidden;
-        }
+        .welcome-left { flex: 0 0 auto; min-width: 0; overflow: hidden; }
+        .welcome-right { flex: 0 0 auto; overflow: hidden; }
 
         .logo-pre {
             font-family: 'Courier New', Courier, monospace;
@@ -83,7 +71,6 @@
             color: #ece0c4;
             white-space: pre;
             margin: 2px 0 8px;
-            letter-spacing: 0;
         }
 
         .portrait-pre {
@@ -95,61 +82,39 @@
             opacity: 0.85;
         }
 
-        .version-tag {
-            font-size: 14px;
-            color: #ece0c4;
-            margin-bottom: 2px;
-        }
+        .line { min-height: 1.5em; white-space: pre-wrap; }
 
-        .line {
-            min-height: 1.5em;
-            white-space: pre-wrap;
-        }
+        .menu-item { line-height: 1.7; white-space: pre; }
+        .menu-item.active { color: #ece0c4; }
+        .menu-item.inactive { color: #666; }
+        .menu-arrow { color: #BF5700; }
 
-        .cmd-name {
-            color: #BF5700;
+        .live-line { min-height: 1.5em; white-space: pre-wrap; }
+
+        .cursor {
             display: inline-block;
-            min-width: 140px;
+            width: 0.55em;
+            height: 1em;
+            background: #ece0c4;
+            vertical-align: text-bottom;
+            animation: blink 1s steps(1) infinite;
         }
+        @keyframes blink { 50% { opacity: 0; } }
 
-        .input-row {
-            display: flex;
-            align-items: center;
-            flex-shrink: 0;
-        }
+        .cmd-name { color: #BF5700; display: inline-block; min-width: 140px; }
 
-        #cmd-input {
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #ece0c4;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 15px;
-            flex: 1;
-            caret-color: #BF5700;
-        }
+        a { color: #F8971F; text-decoration: none; }
+        a:hover { color: #ffffff; text-decoration: underline; }
 
-        a {
-            color: #F8971F;
-            text-decoration: none;
-        }
-
-        a:hover {
-            color: #ffffff;
-            text-decoration: underline;
-        }
-
-        /* Tablet */
         @media (max-width: 900px) {
+            body { padding: 24px; }
             .logo-pre { font-size: 9px; }
             .portrait-pre { font-size: 4px; }
         }
 
-        /* Mobile — stack portrait below name */
         @media (max-width: 640px) {
             body { padding: 10px; font-size: 13px; }
             #terminal { padding: 14px 16px; }
-            #cmd-input { font-size: 13px; }
             .logo-pre { font-size: 5px; }
             .portrait-pre { font-size: 3.5px; }
             .welcome-left { width: 100%; }
@@ -161,14 +126,11 @@
 <body>
 <div id="terminal">
     <div id="output"></div>
-    <div class="input-row">
-        <span class="prompt">visitor@portfolio:~$&nbsp;</span>
-        <input id="cmd-input" type="text" autofocus spellcheck="false" autocomplete="off" />
-    </div>
 </div>
+<input id="capture" type="text" autocomplete="off" spellcheck="false" />
 
 <script>
-    // ─── ASCII art logo ───────────────────────────────────────────────────────
+    // ── Logo ─────────────────────────────────────────────────────────────────
     const LOGO = ` ██╗   ██╗  █████╗  ██╗ ███████╗ ██╗  ██╗ ███╗   ██╗ ██╗   ██╗ ██╗   ██╗
  ██║   ██║ ██╔══██╗ ██║ ██╔════╝ ██║  ██║ ████╗  ██║ ██║   ██║ ██║   ██║
  ██║   ██║ ███████║ ██║ ███████╗ ███████║ ██╔██╗ ██║ ██║   ██║ ██║   ██║
@@ -183,67 +145,106 @@
     ██║    ██║  ██║ ██║ ██║  ██║ ╚██████╔╝ ██║  ██║ ██║  ██║ ██║  ██║ ╚█████╔╝ ██║  ██║ ██║ ╚████║
     ╚═╝    ╚═╝  ╚═╝ ╚═╝ ╚═╝  ╚═╝  ╚═════╝  ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝  ╚════╝  ╚═╝  ╚═╝ ╚═╝  ╚═══╝`;
 
-    // ─── Terminal helpers ─────────────────────────────────────────────────────
-    const output = document.getElementById('output');
-    const input  = document.getElementById('cmd-input');
+    // ── DOM ──────────────────────────────────────────────────────────────────
+    const output  = document.getElementById('output');
+    const capture = document.getElementById('capture');
 
-    const PROMPT  = '<span class="prompt">visitor@portfolio:~$</span> ';
-    const VERSION = 'v2.0.0';
+    const PROMPT_HTML = '<span class="prompt">visitor@portfolio:~$</span> ';
+    const MENU_ITEMS  = ['about', 'experience', 'projects', 'contact'];
 
-    function line(html, cls = 'line') {
-        const d = document.createElement('div');
-        d.className = cls;
-        d.innerHTML = html;
+    // ── State ────────────────────────────────────────────────────────────────
+    let mode    = 'menu';
+    let menuIdx = 0;
+    let buffer  = '';
+    let menuEl  = null;
+    let liveEl  = null;
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+    function addEl(tag, cls, html) {
+        const d = document.createElement(tag);
+        if (cls)            d.className = cls;
+        if (html !== undefined) d.innerHTML = html;
         output.appendChild(d);
+        return d;
+    }
+    function line(html) { addEl('div', 'line', html); }
+    function blank()    { addEl('div', 'line', ''); }
+    function promptLine(cmd) { line(PROMPT_HTML + (cmd || '')); }
+    function scroll()   { output.scrollTop = output.scrollHeight; }
+    function esc(s)     { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    // ── Menu ─────────────────────────────────────────────────────────────────
+    function showMenu() {
+        mode    = 'menu';
+        menuIdx = 0;
+        menuEl  = addEl('div', 'menu-list');
+        renderMenu();
+        scroll();
+        capture.focus();
     }
 
-    function blank() { line(''); }
-    function sep()   { line('--'); }
-    function promptLine() { line(PROMPT + '~'); }
+    function renderMenu() {
+        menuEl.innerHTML = MENU_ITEMS.map((item, i) => {
+            const active = i === menuIdx;
+            return `<div class="menu-item ${active ? 'active' : 'inactive'}">`
+                 + `<span class="menu-arrow">${active ? '❯' : ' '}</span> ${item}</div>`;
+        }).join('');
+    }
 
-    // ─── Commands ─────────────────────────────────────────────────────────────
+    function confirmMenu() {
+        const chosen = MENU_ITEMS[menuIdx];
+        menuEl.remove(); menuEl = null;
+        promptLine(chosen);
+        blank();
+        COMMANDS[chosen]();
+        blank();
+        promptLine();
+        showMenu();
+        scroll();
+    }
+
+    // ── Live typing line ──────────────────────────────────────────────────────
+    function showLiveLine() {
+        liveEl = addEl('div', 'live-line');
+        renderLiveLine();
+    }
+
+    function renderLiveLine() {
+        liveEl.innerHTML = PROMPT_HTML + esc(buffer) + '<span class="cursor"></span>';
+        scroll();
+    }
+
+    // ── Commands ──────────────────────────────────────────────────────────────
     const COMMANDS = {
-        help() {
-            line('Available commands:');
-            blank();
-            line('<span class="cmd-name">about</span>      who am I');
-            line('<span class="cmd-name">experience</span> where I\'ve worked');
-            line('<span class="cmd-name">projects</span>   things I\'ve built');
-            line('<span class="cmd-name">contact</span>    how to reach me');
-            line('<span class="cmd-name">clear</span>      clear the terminal');
-        },
         about() {
-            line('Vaishnuv Thiagarajan');
+            line('ECB Honors student at UT Austin (Electrical &amp; Computer Engineering Honors and Canfield Business Honors). I love to build things and explore opportunities in technology and business, such as Entrepreneurship, PM, or SWE.');
             blank();
-            line('ECE Honors + Business Honors @ UT Austin (Texas ECB)');
-            line('<a href="https://txproduct.org" target="_blank">President @ Texas Product Engineering Organization (TPEO)</a>');
-            blank();
-            line('Builder | Leader | Student');
             line('Hobbies: vibecoding or touching grass');
             line('Location: Austin, TX');
+            blank();
+            line('Bay area born, raised in the heart of Texas 🤘');
         },
         experience() {
-            line('Experience:');
-            blank();
             line('  Product Management Intern @ IBM');
             line('  AI Solutions Engineer @ Lendflow (YC W21)');
             line('  Growth &amp; Strategy Partner @ Anthropic');
             line('  Technology Analyst Intern @ State Farm');
         },
         projects() {
-            line('Projects:');
-            blank();
             line('  AI Agentic Deals Dashboard (Lendflow)');
-            line('  Hardware-as-a-Service Web Platform');
+            line('  <a href="https://github.com/nitinjaladanki/18470-SWEGroup10" target="_blank">Hardware-as-a-Service Web Platform</a>');
             line('  <a href="https://www.scriptic.xyz/" target="_blank">Scriptic - AI Webpage Search Extension</a>');
             line('  <a href="https://www.aidr-app.xyz/" target="_blank">Aidr: Outdoor Safety Guidance App</a>');
         },
         contact() {
-            line('Contact:');
+            line('  <a href="https://github.com/VaishnuvT" target="_blank">GitHub</a>');
+            line('  <a href="https://linkedin.com/in/Vaishnuv-Thiagarajan" target="_blank">LinkedIn</a>');
+            line('  <a href="mailto:vaishnuv.thiagarajan@gmail.com">Email</a>');
+        },
+        help() {
+            line('  Use ↑ ↓ arrow keys and Enter to navigate, or type a section name:');
             blank();
-            line('  GitHub    <a href="https://github.com/VaishnuvT" target="_blank">github.com/VaishnuvT</a>');
-            line('  LinkedIn  <a href="https://linkedin.com/in/Vaishnuv-Thiagarajan" target="_blank">linkedin.com/in/Vaishnuv-Thiagarajan</a>');
-            line('  Email     <a href="mailto:vaishnuv.thiagarajan@gmail.com">vaishnuv.thiagarajan@gmail.com</a>');
+            MENU_ITEMS.forEach(item => line('  ' + item));
         },
         clear() {
             output.innerHTML = '';
@@ -251,33 +252,84 @@
         }
     };
 
-    function run(raw) {
-        line(PROMPT + raw);
-        blank();
-        if (!raw.trim()) { promptLine(); return; }
-        const cmd = raw.trim().toLowerCase();
-        if (COMMANDS[cmd]) {
-            COMMANDS[cmd]();
-        } else {
-            line("command not found: " + raw.trim() + ". Type 'help' for available commands.");
-        }
-        blank();
-        promptLine();
-        output.scrollTop = output.scrollHeight;
-    }
+    // ── Keyboard handler ──────────────────────────────────────────────────────
+    capture.addEventListener('keydown', e => {
+        if (mode === 'menu') {
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                menuIdx = Math.max(0, menuIdx - 1);
+                renderMenu();
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                menuIdx = Math.min(MENU_ITEMS.length - 1, menuIdx + 1);
+                renderMenu();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                confirmMenu();
+            } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                menuEl.remove(); menuEl = null;
+                mode   = 'typing';
+                buffer = e.key;
+                showLiveLine();
+            }
 
-    // ─── Welcome screen ───────────────────────────────────────────────────────
+        } else if (mode === 'typing') {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const cmd = buffer.trim().toLowerCase();
+                liveEl.innerHTML = PROMPT_HTML + esc(cmd);
+                liveEl = null;
+                buffer = '';
+                blank();
+                if (cmd === 'clear') {
+                    output.innerHTML = '';
+                    welcome();
+                    return;
+                }
+                if (COMMANDS[cmd]) {
+                    COMMANDS[cmd]();
+                } else if (cmd !== '') {
+                    line('command not found: ' + esc(cmd) + ". Type 'help' for options.");
+                }
+                blank();
+                promptLine();
+                showMenu();
+
+            } else if (e.key === 'Backspace') {
+                e.preventDefault();
+                buffer = buffer.slice(0, -1);
+                if (buffer === '') {
+                    liveEl.remove(); liveEl = null;
+                    showMenu();
+                } else {
+                    renderLiveLine();
+                }
+
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                buffer = '';
+                if (liveEl) { liveEl.remove(); liveEl = null; }
+                showMenu();
+
+            } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                buffer += e.key;
+                renderLiveLine();
+            }
+        }
+    });
+
+    document.getElementById('terminal').addEventListener('click', () => capture.focus());
+
+    // ── Welcome ───────────────────────────────────────────────────────────────
     function welcome() {
-        promptLine();
-        blank();
+        // Date/time — no prompt
         line('Welcome to my portfolio: ' + new Date().toString().replace(/\s*\(.*\)$/, ''));
         blank();
 
-        // Two-column wrapper
-        const row = document.createElement('div');
+        // Two-column: name + portrait
+        const row  = document.createElement('div');
         row.className = 'welcome-row';
 
-        // ── Left column ──────────────────────────────────────────────────────
         const left = document.createElement('div');
         left.className = 'welcome-left';
 
@@ -286,34 +338,24 @@
         logoPre.textContent = LOGO;
         left.appendChild(logoPre);
 
-        const ver = document.createElement('div');
-        ver.className = 'version-tag';
-        ver.textContent = VERSION;
-        left.appendChild(ver);
-
-        const addLeft = (html) => {
+        const addLeft = html => {
             const d = document.createElement('div');
             d.className = 'line';
             d.innerHTML = html;
             left.appendChild(d);
         };
         addLeft('');
-        addLeft("Type 'help' to see list of available commands.");
+        addLeft('Builder | Leader | Student');
         addLeft('');
-        addLeft('--');
+        addLeft('ECE Honors + Business Honors @ UT Austin (Texas ECB)');
         addLeft('');
-        addLeft("Builder | Leader | Student &mdash; UT Austin.");
-        addLeft('--');
+        addLeft('<a href="https://txproduct.org" target="_blank">President of Texas Product Engineering Organization (TPEO)</a>');
 
-        // ── Right column — ASCII portrait ────────────────────────────────────
-        const right = document.createElement('div');
+        const right    = document.createElement('div');
         right.className = 'welcome-right';
-
-        const portrait = document.createElement('pre');
+        const portrait  = document.createElement('pre');
         portrait.className = 'portrait-pre';
-        fetch('./portrait.txt')
-            .then(r => r.text())
-            .then(t => { portrait.textContent = t; });
+        fetch('./portrait.txt').then(r => r.text()).then(t => { portrait.textContent = t; });
         right.appendChild(portrait);
 
         row.appendChild(left);
@@ -321,20 +363,13 @@
         output.appendChild(row);
 
         blank();
-        promptLine();
+        promptLine("type 'help' to see list of available commands.");
+        blank();
+        showMenu();
     }
 
-    input.addEventListener('keydown', e => {
-        if (e.key === 'Enter') {
-            const val = input.value;
-            input.value = '';
-            run(val);
-        }
-    });
-
-    document.getElementById('terminal').addEventListener('click', () => input.focus());
-
     welcome();
+    capture.focus();
 </script>
 </body>
 </html>
